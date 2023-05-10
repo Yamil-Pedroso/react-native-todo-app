@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import Task from './components/Task'
 
 export default function App() {
   const [todos, setTodos] = useState([])
@@ -19,12 +20,15 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Todo List</Text>
-      <View>
-        {todos.map((todo: any) => (
-          <Text key={todo.id}>{todo.title}</Text>
-        ))}
-      </View>
+      <SafeAreaView>
+        <FlatList
+          data={todos}
+          keyExtractor={(item: any) => item.id}
+          renderItem={({ item }: any) => <Task {...item} />}
+          ListHeaderComponent={() => <Text style={styles.title}>Today</Text>}
+          contentContainerStyle={styles.contentContainerStyle}
+        />
+      </SafeAreaView>
 
       <StatusBar style="auto" />
     </View>
@@ -34,8 +38,14 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#E9E9EF',
+  },
+  contentContainerStyle: {
+    padding: 20,
+  },
+  title: {
+    fontWeight: '800',
+    fontSize: 28,
+    marginBottom: 15,
   },
 })
